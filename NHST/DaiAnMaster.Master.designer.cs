@@ -24,15 +24,6 @@ namespace NHST
         protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
 
         /// <summary>
-        /// ltrHeaderSeo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrHeaderSeo;
-
-        /// <summary>
         /// ltrSEO control.
         /// </summary>
         /// <remarks>
@@ -40,15 +31,6 @@ namespace NHST
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal ltrSEO;
-
-        /// <summary>
-        /// ltrCanon control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrCanon;
 
         /// <summary>
         /// form1 control.

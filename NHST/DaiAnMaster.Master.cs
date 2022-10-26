@@ -60,21 +60,10 @@ namespace NHST
                 //ltrZalo4.Text += "<li><a href=\"" + confi.Instagram + "\" target=\"_blank\"><img src=\"/App_Themes/CSSDAIAN/images/zalo.png\" alt=\"\"></a></li>";
             }
 
-            #region lấy meta
-            HtmlHead objHeader = (HtmlHead)Page.Header;
-            HtmlMeta meta = new HtmlMeta();
-            meta = new HtmlMeta();
-            meta.Attributes.Add("name", "description");
-            meta.Content = confi.MetaDescription;
-            objHeader.Controls.Add(meta);
-
-            meta = new HtmlMeta();
-            meta.Attributes.Add("name", "keyword");
-            meta.Content = confi.MetaKeyword;
-            objHeader.Controls.Add(meta);
+            #region lấy meta        
             ltrSEO.Text += "<script>" + confi.GoogleAnalytics + "</script>";
             ltrSEO.Text += "<script>" + confi.WebmasterTools + "</script>";
-            ltrHeaderSeo.Text += "<script>" + confi.HeaderScriptCode + "</script>";
+            ltrSEO.Text += "<script>" + confi.HeaderScriptCode + "</script>";
             #endregion
 
             if (Session["userLoginSystem"] != null)

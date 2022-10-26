@@ -144,7 +144,7 @@ namespace NHST
             var confi = ConfigurationController.GetByTop1();
             try
             {
-                string weblink = "https://nhaphangtrungquocdaian.com/";
+                string weblink = "https://nhaphangtietkiem.vn";
                 string url = HttpContext.Current.Request.Url.AbsoluteUri;
 
                 HtmlHead objHeader = (HtmlHead)Page.Header;
@@ -195,7 +195,12 @@ namespace NHST
                 HtmlMeta meta = new HtmlMeta();
                 meta = new HtmlMeta();
                 meta.Attributes.Add("name", "description");
-                meta.Content = confi.MetaDescription;
+                meta.Content = confi.MetaDescription;              
+
+                meta = new HtmlMeta();
+                meta.Attributes.Add("name", "keyword");
+                meta.Content = confi.MetaKeyword;
+                objHeader.Controls.Add(meta);
 
                 objHeader.Controls.Add(meta);
                 this.Title = confi.MetaTitle;

@@ -168,6 +168,7 @@ namespace NHST.manager
                                                     }
                                                 }
                                                 pg.PayWeight = Math.Round(pg.PayWeight, 2);
+                                                pg.CODTQVND = sm.CODTQVND;
                                                 sms.Add(pg);
                                                 SmallPackageController.UpdateWarehouseFeeDateOutWarehouse(sm.ID, payInWarehouse, currentDate);
                                                 OutStockSessionPackageController.update(p.ID, currentDate, totalDays, payInWarehouse);
@@ -414,6 +415,9 @@ namespace NHST.manager
                             {
                                 int orderType = o.OrderType;
                                 bool isPay = o.isPay;
+                                string feeShip = "";
+                                string codTQ = "";
+                                int colspan = 8;
                                 string status = "<span class=\"blue-text font-weight-600\">Đã thanh toán</span>";
                                 if (o.isPay == false)
                                 {
@@ -424,17 +428,25 @@ namespace NHST.manager
                                 html.Append("<div class=\"responsive-tb package-item\">");
                                 if (orderType == 1)
                                 {
+                                    var mainOrder = MainOrderController.GetByID(o.OrderID);
+
                                     if (isPay == true)
                                         html.Append("<span class=\"owner\">Đơn hàng mua hộ: #" + o.OrderID + "</span>");
                                     else
                                         html.Append("<span class=\"owner\">Đơn hàng mua hộ: #" + o.OrderID + "</span>");
+                                    feeShip = $"<td><span>{mainOrder.IsFastDeliveryPrice}</span></td>";
                                 }
                                 else
                                 {
+                                    var transOrder = TransportationOrderController.GetByID(o.OrderID);
+
                                     if (isPay == true)
                                         html.Append("<span class=\"owner\">Đơn hàng vận chuyển hộ: #" + o.OrderID + "</span>");
                                     else
                                         html.Append("<span class=\"owner\">Đơn hàng vận chuyển hộ: #" + o.OrderID + "</span>");
+                                    feeShip = $"<td><span>{string.Format("{0:N0}", transOrder.FeeShipHome)}</span></td>";
+                                    codTQ = $"<td><span>{transOrder.TotalCODTQVND}</span></td>";
+                                    colspan = 9;
                                 }
 
                                 html.Append("<table class=\"table bordered \">");
@@ -442,9 +454,12 @@ namespace NHST.manager
                                 html.Append("<tr class=\"teal darken-4\">");
                                 html.Append("<th>Mã kiện</th>");
                                 html.Append("<th>Cân nặng (kg)</th>");
-                                html.Append("<th>Cân nặng quy đổi (kg)</th>");
-                                html.Append("<th>Cân nặng tính tiền (kg)</th>");
+                                html.Append("<th>Cân nặng <br> quy đổi (kg)</th>");
+                                html.Append("<th>Cân nặng <br> tính tiền (kg)</th>");
                                 html.Append("<th>Đơn giá</th>");
+                                html.Append("<th>Ship tận nhà</th>");
+                                if (!string.IsNullOrEmpty(codTQ))
+                                    html.Append("<th>COD Trung Quốc</th>");
                                 html.Append("<th>Ngày lưu kho (Ngày)</th>");
                                 html.Append("<th>Trạng thái</th>");
                                 html.Append("<th>Tiền cân nặng</th>");
@@ -463,7 +478,10 @@ namespace NHST.manager
                                     html.Append("<td><span>" + p.weight + "</span></td>");
                                     html.Append("<td><span>" + p.ExchangeWeight + "</span></td>");
                                     html.Append("<td><span>" + p.PayWeight + "</span></td>");
-                                    html.Append("<td><span>" + donGia + "</span></td>");
+                                    html.Append("<td><span>" + string.Format("{0:N0}", donGia) + "</span></td>");
+                                    html.Append(feeShip);
+                                    if (!string.IsNullOrEmpty(codTQ))
+                                        html.Append(codTQ);
                                     html.Append("<td><span>" + p.DateInWare + "</span></td>");
                                     html.Append("<td>" + PJUtils.IntToStringStatusSmallPackageNew(p.Status) + "</td>");
                                     html.Append("<td>" + string.Format("{0:N0}", p.UnitPrice) + " VNĐ</td>");
@@ -474,19 +492,19 @@ namespace NHST.manager
                                 html.Append("</tbody>");
                                 html.Append("<tbody>");
                                 html.Append("<tr>");
-                                html.Append("<td colspan=\"7\"><span class=\"black-text font-weight-500\">Tổng tiền lưu kho</span></td>");
+                                html.Append($"<td colspan=\"{colspan}\"><span class=\"black-text font-weight-500\">Tổng tiền lưu kho</span></td>");
                                 html.Append("<td><span class=\"black-text font-weight-600\">" + string.Format("{0:N0}", o.totalPrice) + " VNĐ</span></td>");
                                 html.Append("</tr>");
                                 html.Append("<tr>");
-                                html.Append("<td colspan=\"7\"><span class=\"black-text font-weight-500\">Trạng thái</span></td>");
+                                html.Append($"<td colspan=\"{colspan}\"><span class=\"black-text font-weight-500\">Trạng thái</span></td>");
                                 html.Append("<td>" + status + "</td>");
                                 html.Append("</tr>");
                                 html.Append("<tr>");
-                                html.Append("<td colspan=\"7\"><span class=\"black-text font-weight-500\">Tiền cần thanh toán</span></td>");
+                                html.Append($"<td colspan=\"{colspan}\"><span class=\"black-text font-weight-500\">Tiền cần thanh toán</span></td>");
                                 html.Append("<td><span class=\"red-text font-weight-700\">" + string.Format("{0:N0}", o.totalMustPay) + " VNĐ</span></td>");
                                 html.Append("</tr>");
                                 html.Append("<tr>");
-                                html.Append("<td colspan=\"7\"><span class=\"black-text font-weight-500\">Tổng tiền đơn hàng</span></td>");
+                                html.Append($"<td colspan=\"{colspan}\"><span class=\"black-text font-weight-500\">Tổng tiền đơn hàng</span></td>");
                                 html.Append("<td><span class=\"blue-text font-weight-700\">" + string.Format("{0:N0}", o.ToTalPriceVND) + " VNĐ</span></td>");
                                 html.Append("</tr>");
                                 html.Append("</tbody>");
@@ -511,9 +529,12 @@ namespace NHST.manager
                                 htmlPrint.Append("           <tr>");
                                 htmlPrint.Append("               <th style=\"color:#000\">Mã kiện</th>");
                                 htmlPrint.Append("               <th style=\"color:#000\">Cân nặng (kg)</th>");
-                                htmlPrint.Append("               <th style=\"color:#000\">Cân nặng quy đổi (kg)</th>");
-                                htmlPrint.Append("               <th style=\"color:#000\">Cân nặng tính tiền (kg)</th>");
+                                htmlPrint.Append("               <th style=\"color:#000\">Cân nặng <br> quy đổi (kg)</th>");
+                                htmlPrint.Append("               <th style=\"color:#000\">Cân nặng <br> tính tiền (kg)</th>");
                                 htmlPrint.Append("               <th style=\"color:#000\">Đơn giá</th>");
+                                htmlPrint.Append("<th style=\"color:#000\">Ship tận nhà</th>");
+                                if (!string.IsNullOrEmpty(codTQ))
+                                    htmlPrint.Append("<th style=\"color:#000\">COD Trung Quốc</th>");
                                 htmlPrint.Append("               <th style=\"color:#000\">Ngày lưu kho (ngày)</th>");
                                 htmlPrint.Append("               <th style=\"color:#000\">Tiền cân nặng</th>");
                                 htmlPrint.Append("           </tr>");
@@ -528,24 +549,28 @@ namespace NHST.manager
                                     htmlPrint.Append("               <td>" + p.weight + "</td>");
                                     htmlPrint.Append("               <td>" + p.ExchangeWeight + "</td>");
                                     htmlPrint.Append("               <td>" + p.PayWeight + "</td>");
-                                    htmlPrint.Append("               <td>" + donGia + "</td>");
+                                    htmlPrint.Append("               <td>" + string.Format("{0:N0}", donGia) + "</td>");
+                                    htmlPrint.Append(feeShip);
+                                    if (!string.IsNullOrEmpty(codTQ))
+                                        htmlPrint.Append(codTQ);
                                     htmlPrint.Append("               <td>" + p.DateInWare + "</td>");
                                     htmlPrint.Append("               <td>" + string.Format("{0:N0}", p.UnitPrice) + " vnđ</td>");
                                     htmlPrint.Append("           </tr>");
                                 }
 
                                 htmlPrint.Append("           <tr style=\"font-size: 15px; text-transform: uppercase\">");
-                                htmlPrint.Append("               <td colspan=\"6\" class=\"text-align-right\">Tổng tiền cần thanh toán</td>");
+                                htmlPrint.Append($"               <td colspan=\"{colspan - 1}\" class=\"text-align-right\">Tổng tiền cần thanh toán</td>");
                                 htmlPrint.Append("               <td>" + string.Format("{0:N0}", o.totalPrice) + " vnđ</td>");
                                 htmlPrint.Append("           </tr>");
 
                                 htmlPrint.Append("<tr style=\"font-size: 15px; text-transform: uppercase\">");
-                                htmlPrint.Append("<td colspan=\"6\"><span class=\"text-align-right\">Tổng tiền đơn hàng</span></td>");
+                                htmlPrint.Append($"<td colspan=\"{colspan - 1}\"><span class=\"text-align-right\">Tổng tiền đơn hàng</span></td>");
                                 htmlPrint.Append("<td><span class=\"blue-text font-weight-700\">" + string.Format("{0:N0}", o.ToTalPriceVND) + " VNĐ</span></td>");
                                 htmlPrint.Append("</tr>");
                                 htmlPrint.Append("       </table>");
                                 htmlPrint.Append("   </article>");
                                 htmlPrint.Append("</article>");
+
                             }
                             ltrList.Text = html.ToString();
                             ViewState["content"] = htmlPrint.ToString();
@@ -835,6 +860,94 @@ namespace NHST.manager
             Page.Response.Redirect(Page.Request.Url.ToString(), true);
         }
 
+        protected void btnExcel_Click(object sender, EventArgs e)
+        {
+            int id = 0;
+            if (!string.IsNullOrEmpty(Request.QueryString["id"]))
+            {
+                id = int.Parse(Request.QueryString["id"]);
+            }
+
+            if (id > 0)
+            {
+                var outStock = OutStockSessionController.GetByID(id);
+                var outStockPackages = OutStockSessionPackageController.GetAllByOutStockSessionID(id);
+                StringBuilder StrExport = new StringBuilder();
+                StrExport.Append(@"<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'><head><title>Time</title>");
+                StrExport.Append(@"<body lang=EN-US style='mso-element:header' id=h1><span style='mso--code:DATE'></span><div class=Section1>");
+                StrExport.Append("<DIV  style='font-size:12px;'>");
+                StrExport.Append("<table border=\"1\">");
+                StrExport.Append("  <tr>");
+                StrExport.Append("      <th><strong>ID</strong></th>");
+                StrExport.Append("      <th><strong>Nhân viên</strong></th>");
+                StrExport.Append("      <th><strong>Họ tên khách</strong></th>");
+                StrExport.Append("      <th><strong>Điện thoại</strong></th>");
+                StrExport.Append("      <th><strong>Mã kiện</strong></th>");
+                StrExport.Append("      <th><strong>Cân tính tiền (kg)</strong></th>");
+                StrExport.Append("      <th><strong>Ngày lưu kho</strong></th>");
+                StrExport.Append("      <th><strong>Tiền Ship tận nhà</strong></th>");
+                StrExport.Append("      <th><strong>Tiền cân nặng</strong></th>");
+                StrExport.Append("      <th><strong>Tiền đã trả</strong></th>");
+                StrExport.Append("      <th><strong>Tiền cần thanh toán</strong></th>");
+                StrExport.Append("      <th><strong>Tổng tiền đơn hàng</strong></th>");
+                StrExport.Append("      <th><strong>Trạng thái</strong></th>");
+                StrExport.Append("      <th><strong>Ngày tạo</strong></th>");
+                StrExport.Append("  </tr>");
+                foreach (var item in outStockPackages)
+                {
+                    var sm = SmallPackageController.GetByID(item.SmallPackageID ?? 0);
+                    double canQuiDoi = 0;
+                    if (sm.Width != null && sm.Height != null && sm.Length != null)
+                        canQuiDoi = (sm.Width.Value * sm.Height.Value * sm.Length.Value) / 6000;
+                    double canTinhTien = 0;
+                    if (sm.Weight != null)
+                    {
+                        if (canQuiDoi > sm.Weight.Value)
+                        {
+                            canTinhTien += canQuiDoi;
+                        }
+                        else
+                        {
+                            canTinhTien += sm.Weight.Value;
+                        }
+                    }
+                    var mainOrder = MainOrderController.GetByID(sm.MainOrderID ?? 0);
+                    var transOrder = TransportationOrderController.GetByID(sm.TransportationOrderID ?? 0);
+                    var tongTienDonHang = mainOrder != null ? Convert.ToDouble(mainOrder.TotalPriceVND) : transOrder.TotalPrice;
+                    var shipTanNha = mainOrder != null ? Convert.ToDouble(mainOrder.IsFastDeliveryPrice) : transOrder.FeeShipHome;
+                    StrExport.Append("  <tr>");
+                    StrExport.Append("      <td>" + item.ID + "</td>");
+                    StrExport.Append("      <td>" + outStock.Username + "</td>");
+                    StrExport.Append("      <td>" + outStock.FullName + "</td>");
+                    StrExport.Append("      <td>" + outStock.Phone + "</td>");
+                    StrExport.Append("      <td>" + item.OrderTransactionCode + "</td>");
+                    StrExport.Append("      <td>" + Convert.ToDouble(canTinhTien) + "</td>");
+                    StrExport.Append("      <td>" + item.DayInWarehouse + "</td>");
+                    StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(shipTanNha)) + "</td>");
+                    StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(sm.TotalPrice)) + "</td>");
+                    StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(tongTienDonHang) - outStock.TotalPay) + "</td>");
+                    StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(outStock.TotalPay)) + "</td>");
+                    StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(tongTienDonHang)) + "</td>");
+                    StrExport.Append("      <td>" + PJUtils.IntToStringStatusSmallPackageNew(Convert.ToInt32(sm.Status)) + "</td>");
+                    StrExport.Append("      <td>" + item.CreatedDate + "</td>");
+                    StrExport.Append("  </tr>");
+                }
+                StrExport.Append("</table>");
+                StrExport.Append("</div></body></html>");
+                string strFile = "ExcelReportOutStockList.xls";
+                string strcontentType = "application/vnd.ms-excel";
+                Response.ClearContent();
+                Response.ClearHeaders();
+                Response.BufferOutput = true;
+                Response.ContentType = strcontentType;
+                Response.AddHeader("Content-Disposition", "attachment; filename=" + strFile);
+                Response.Write(StrExport.ToString());
+                Response.Flush();
+                //Response.Close();
+                Response.End();
+            }
+        }
+
         public class OrderPackage
         {
             public int OrderID { get; set; }
@@ -857,6 +970,7 @@ namespace NHST.manager
             public double payInWarehouse { get; set; }
             public double ExchangeWeight { get; set; }
             public double PayWeight { get; set; }
+            public string CODTQVND { get; set; }
             public string TransportFee { get; set; }
         }
         public class Main

@@ -44,42 +44,6 @@ namespace NHST
                 hdfID.Value = obj_user.ID.ToString();
                 var id = RouteData.Values["id"].ToString().ToInt(0);
 
-                //#region Update Trước
-                //var id = RouteData.Values["id"].ToString().ToInt(0);
-                //if (id > 0)
-                //{
-                //    var o = MainOrderController.GetAllByUIDAndID(uid, id);
-                //    if (o != null)
-                //    {
-                //        double totalprice = Math.Round(Convert.ToDouble(o.TotalPriceVND), 0);
-                //        double feeinwarehouse = 0;
-                //        if (o.FeeInWareHouse != null)
-                //            feeinwarehouse = Math.Round(Convert.ToDouble(o.FeeInWareHouse), 0);
-
-                //        double totalPay = totalprice + feeinwarehouse;
-                //        totalPay = Math.Round(totalPay, 0);
-                //        double deposited = Math.Round(Convert.ToDouble(o.Deposit), 0);
-                //        double leftpay = totalPay - deposited;
-
-                //        if (leftpay > 0)
-                //        {
-                //            //ddlStatus.Items.Add(new ListItem("Chờ đặt cọc", "0"));
-                //            //ddlStatus.Items.Add(new ListItem("Đã đặt cọc", "2"));
-                //            //ddlStatus.Items.Add(new ListItem("Đã mua hàng", "5"));
-                //            //ddlStatus.Items.Add(new ListItem("Đang về kho đích", "6"));
-                //            //ddlStatus.Items.Add(new ListItem("Đã nhận hàng tại kho đích", "7"));
-                //            ////ddlStatus.Items.Add(new ListItem("Chờ thanh toán", "8"));
-                //            //ddlStatus.Items.Add(new ListItem("Khách đã thanh toán", "9"));
-                //            //ddlStatus.Items.Add(new ListItem("Đã hoàn thành", "10"));
-                //            if (o.Status == 7)
-                //            {
-                //                MainOrderController.UpdateStatus(o.ID, uid, 7);
-                //            }
-                //        }
-                //    }
-                //}
-                //#endregion
-
                 double UL_CKFeeBuyPro = 0;
                 double UL_CKFeeWeight = 0;
 
@@ -249,8 +213,11 @@ namespace NHST
                         #region Lấy sản phẩm
                         List<tbl_Order> lo = new List<tbl_Order>();
                         lo = OrderController.GetByMainOrderID(o.ID);
+
                         if (lo.Count > 0)
                         {
+                            ltrCountProducts.Text = lo.Count.ToString();
+                            ltrCountProducts2.Text = lo.Sum(x => Convert.ToInt32(x.quantity)).ToString();
                             int stt = 1;
                             foreach (var item in lo)
                             {
