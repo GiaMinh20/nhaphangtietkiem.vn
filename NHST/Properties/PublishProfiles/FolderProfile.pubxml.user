@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\OneDrive\Máy tính\WF</_PublishTargetUrl>
-    <History>True|2022-10-24T08:16:29.7359873Z;False|2022-10-24T15:15:21.2276413+07:00;False|2022-10-24T15:14:27.4475884+07:00;False|2022-10-24T15:13:45.1513512+07:00;False|2022-10-24T15:13:02.9935696+07:00;False|2022-10-24T15:12:14.5293625+07:00;False|2022-10-24T15:10:25.4084003+07:00;</History>
+    <History>True|2022-10-28T04:34:54.4194407Z;True|2022-10-24T15:16:29.7359873+07:00;False|2022-10-24T15:15:21.2276413+07:00;False|2022-10-24T15:14:27.4475884+07:00;False|2022-10-24T15:13:45.1513512+07:00;False|2022-10-24T15:13:02.9935696+07:00;False|2022-10-24T15:12:14.5293625+07:00;False|2022-10-24T15:10:25.4084003+07:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -26596,10 +26596,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/24/2022 13:39:47</publishTime>
     </File>
     <File Include="bin/NHST.dll">
-      <publishTime>10/26/2022 09:06:20</publishTime>
+      <publishTime>10/28/2022 11:34:42</publishTime>
     </File>
     <File Include="bin/NHST.pdb">
-      <publishTime>10/26/2022 09:06:20</publishTime>
+      <publishTime>10/28/2022 11:34:42</publishTime>
     </File>
     <File Include="bin/Owin.dll">
       <publishTime>10/24/2022 13:39:47</publishTime>

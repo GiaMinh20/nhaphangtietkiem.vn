@@ -599,6 +599,8 @@ namespace NHST.manager
                         }
                     }
                     SmallPackageController.UpdateIMG(package.ID, link, DateTime.UtcNow.AddHours(7), username_current);
+                    if (quantt < 0.5)
+                        quantt = 0.5;
                     SmallPackageController.UpdateWeightStatus(package.ID, quantt, status, BigPackageID, dai, rong, cao);
                     SmallPackageController.UpdateStaffNoteCustdescproducttype(package.ID, nvkiemdem, khachghichu, loaisanpham);
                     SmallPackageController.UpdateNote(package.ID, description);

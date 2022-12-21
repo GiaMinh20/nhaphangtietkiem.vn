@@ -445,7 +445,7 @@ namespace NHST.manager
                                     else
                                         html.Append("<span class=\"owner\">Đơn hàng vận chuyển hộ: #" + o.OrderID + "</span>");
                                     feeShip = $"<td><span>{string.Format("{0:N0}", transOrder.FeeShipHome)}</span></td>";
-                                    codTQ = $"<td><span>{transOrder.TotalCODTQVND}</span></td>";
+                                    codTQ = $"<td><span>{string.Format("{0:N0}", transOrder.TotalCODTQVND)}</span></td>";
                                     colspan = 9;
                                 }
 
@@ -883,10 +883,12 @@ namespace NHST.manager
                 StrExport.Append("      <th><strong>Họ tên khách</strong></th>");
                 StrExport.Append("      <th><strong>Điện thoại</strong></th>");
                 StrExport.Append("      <th><strong>Mã kiện</strong></th>");
-                StrExport.Append("      <th><strong>Cân tính tiền (kg)</strong></th>");
+                StrExport.Append("      <th><strong>Cân tính tiền</strong></th>");
                 StrExport.Append("      <th><strong>Ngày lưu kho</strong></th>");
                 StrExport.Append("      <th><strong>Tiền Ship tận nhà</strong></th>");
+                StrExport.Append("      <th><strong>Tiền COD Trung Quốc</strong></th>");
                 StrExport.Append("      <th><strong>Tiền cân nặng</strong></th>");
+                StrExport.Append("      <th><strong>Đơn giá cân nặng</strong></th>");
                 StrExport.Append("      <th><strong>Tiền đã trả</strong></th>");
                 StrExport.Append("      <th><strong>Tiền cần thanh toán</strong></th>");
                 StrExport.Append("      <th><strong>Tổng tiền đơn hàng</strong></th>");
@@ -915,17 +917,22 @@ namespace NHST.manager
                     var transOrder = TransportationOrderController.GetByID(sm.TransportationOrderID ?? 0);
                     var tongTienDonHang = mainOrder != null ? Convert.ToDouble(mainOrder.TotalPriceVND) : transOrder.TotalPrice;
                     var shipTanNha = mainOrder != null ? Convert.ToDouble(mainOrder.IsFastDeliveryPrice) : transOrder.FeeShipHome;
+                    var cod = transOrder != null ? Convert.ToDouble(transOrder.TotalCODTQVND) : 0;
+                    var tienDaTra = Convert.ToDouble(tongTienDonHang) - outStock.TotalPay;
+                    var tienDaTraOut = tienDaTra < 0 ? 0 : tienDaTra;
                     StrExport.Append("  <tr>");
                     StrExport.Append("      <td>" + item.ID + "</td>");
                     StrExport.Append("      <td>" + outStock.Username + "</td>");
-                    StrExport.Append("      <td>" + outStock.FullName + "</td>");
+                    StrExport.Append("      <td>" + sm.Username + "</td>");
                     StrExport.Append("      <td>" + outStock.Phone + "</td>");
                     StrExport.Append("      <td>" + item.OrderTransactionCode + "</td>");
                     StrExport.Append("      <td>" + Convert.ToDouble(canTinhTien) + "</td>");
                     StrExport.Append("      <td>" + item.DayInWarehouse + "</td>");
                     StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(shipTanNha)) + "</td>");
+                    StrExport.Append("      <td>" + string.Format("{0:N0}", cod) + "</td>");
                     StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(sm.TotalPrice)) + "</td>");
-                    StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(tongTienDonHang) - outStock.TotalPay) + "</td>");
+                    StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(sm.TotalPrice / canTinhTien)) + "</td>");
+                    StrExport.Append("      <td>" + string.Format("{0:N0}", tienDaTraOut) + "</td>");
                     StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(outStock.TotalPay)) + "</td>");
                     StrExport.Append("      <td>" + string.Format("{0:N0}", Convert.ToDouble(tongTienDonHang)) + "</td>");
                     StrExport.Append("      <td>" + PJUtils.IntToStringStatusSmallPackageNew(Convert.ToInt32(sm.Status)) + "</td>");
