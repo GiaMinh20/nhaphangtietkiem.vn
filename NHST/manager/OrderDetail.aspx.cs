@@ -71,26 +71,26 @@ namespace NHST.manager
                         {
 
                         }
-                        else if (RoleID == 3)
-                        {
-                            if (status_order >= 2)
-                            {
-                                //Role đặt hàng
-                                if (o.DathangID == UID)
-                                {
-                                }
+                        //else if (RoleID == 3)
+                        //{
+                        //    if (status_order >= 2)
+                        //    {
+                        //        //Role đặt hàng
+                        //        if (o.DathangID == UID)
+                        //        {
+                        //        }
 
-                                else
-                                {
-                                    Response.Redirect("/manager/OrderList.aspx");
-                                }
-                            }
-                            else
-                            {
-                                Response.Redirect("/manager/OrderList.aspx");
-                            }
+                        //        else
+                        //        {
+                        //            Response.Redirect("/manager/OrderList.aspx");
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        Response.Redirect("/manager/OrderList.aspx");
+                        //    }
 
-                        }
+                        //}
                         else if (RoleID == 4)
                         {
                             if (status_order >= 5 && status_order < 7)

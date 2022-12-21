@@ -555,7 +555,8 @@ namespace NHST.manager
             double quantityT = 0;
             if (quantity.ToFloat(0) > 0)
                 quantityT = Math.Round(Convert.ToDouble(quantity), 1);
-
+            if (quantityT < 0.5)
+                quantityT = 0.5;
             var package = SmallPackageController.GetByID(packageID);
             if (package != null)
             {
